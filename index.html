@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<title>Vault — Personal Finance</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR NAV -->
+<aside class="sidebar">
+  <div class="sidebar-top">
+    <div class="logo">
+      <span class="logo-mark">V</span>
+      <span class="logo-text">Vault</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="log" onclick="showPage('log',this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Log</span>
+      </button>
+      <button class="nav-item" data-page="dashboard" onclick="showPage('dashboard',this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 12 L12 2"/></svg>
+        <span>Dashboard</span>
+      </button>
+      <button class="nav-item" data-page="history" onclick="showPage('history',this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        <span>History</span>
+      </button>
+      <button class="nav-item" data-page="goals" onclick="showPage('goals',this)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+        <span>Goals</span>
+      </button>
+    </nav>
+  </div>
+  <div class="sidebar-bottom">
+    <div class="month-badge" id="sidebar-month"></div>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main">
+
+  <!-- ═══ LOG PAGE ═══ -->
+  <section id="page-log" class="page active">
+    <div class="page-header">
+      <h1>Log a transaction</h1>
+      <p class="page-sub">Record every rupee in and out</p>
+    </div>
+
+    <div class="log-grid">
+      <!-- INCOME FORM -->
+      <div class="form-panel income-panel">
+        <div class="panel-label income-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
+          Income
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="inc-date">
+        </div>
+        <div class="form-group">
+          <label>Source</label>
+          <select id="inc-cat">
+            <option value="Personal classes">Personal classes (1-on-1)</option>
+            <option value="Group paid class">Group paid class</option>
+            <option value="Parents monthly budget">Parents monthly budget</option>
+            <option value="YouTube">YouTube</option>
+            <option value="Freelance">Freelance / Bug bounty</option>
+            <option value="Other income">Other income</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="inc-desc" placeholder="e.g. Private student — August session">
+        </div>
+        <div class="form-group">
+          <label>Amount</label>
+          <div class="amount-input-wrap">
+            <span class="currency">₹</span>
+            <input type="number" id="inc-amt" placeholder="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-error" id="inc-err"></div>
+        <button class="btn btn-income" onclick="addTransaction('income')">Add income</button>
+      </div>
+
+      <!-- EXPENSE FORM -->
+      <div class="form-panel expense-panel">
+        <div class="panel-label expense-label">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+          Expense
+        </div>
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" id="exp-date">
+        </div>
+        <div class="form-group">
+          <label>Bucket</label>
+          <select id="exp-cat">
+            <option value="Daily living">Daily living (food, travel, skincare, room)</option>
+            <option value="Invest">Invest — SIP / Gold</option>
+            <option value="Emergency fund">Emergency fund</option>
+            <option value="Business">Business (certs, tools, equipment)</option>
+            <option value="Personal growth">Personal growth (books, courses, events)</option>
+            <option value="Donations">Donations</option>
+            <option value="Protein & longevity">Protein & longevity</option>
+            <option value="Other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="exp-desc" placeholder="e.g. Groww SIP auto-debit">
+        </div>
+        <div class="form-group">
+          <label>Amount</label>
+          <div class="amount-input-wrap">
+            <span class="currency">₹</span>
+            <input type="number" id="exp-amt" placeholder="0" min="0" step="1">
+          </div>
+        </div>
+        <div class="form-error" id="exp-err"></div>
+        <button class="btn btn-expense" onclick="addTransaction('expense')">Add expense</button>
+      </div>
+    </div>
+
+    <!-- RECENT TRANSACTIONS -->
+    <div class="recent-section">
+      <div class="recent-header">
+        <span class="section-title">Recent</span>
+        <button class="clear-btn" onclick="confirmClear()">Clear all</button>
+      </div>
+      <div id="txn-list" class="txn-list"></div>
+    </div>
+  </section>
+
+  <!-- ═══ DASHBOARD PAGE ═══ -->
+  <section id="page-dashboard" class="page">
+    <div class="page-header">
+      <h1>Dashboard</h1>
+      <p class="page-sub">Your money at a glance</p>
+    </div>
+
+    <!-- HERO BALANCE -->
+    <div class="hero-row">
+      <div class="hero-card">
+        <div class="hero-label">Available to spend today</div>
+        <div class="hero-amount" id="dash-available">₹0</div>
+        <div class="hero-sub" id="dash-sub">Daily living budget remaining</div>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card">
+          <div class="kpi-val income-color" id="kpi-income">₹0</div>
+          <div class="kpi-label">Total income</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val expense-color" id="kpi-expense">₹0</div>
+          <div class="kpi-label">Total spent</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val accent-color" id="kpi-net">₹0</div>
+          <div class="kpi-label">Net balance</div>
+        </div>
+        <div class="kpi-card">
+          <div class="kpi-val invest-color" id="kpi-invested">₹0</div>
+          <div class="kpi-label">Invested</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DONUT + BUCKETS -->
+    <div class="dash-main">
+      <div class="donut-section">
+        <div class="donut-wrap">
+          <canvas id="donut-canvas" width="260" height="260" aria-label="Spending distribution donut chart"></canvas>
+          <div class="donut-center">
+            <div class="donut-center-amt" id="donut-total">₹0</div>
+            <div class="donut-center-lbl">total spent</div>
+          </div>
+        </div>
+        <div class="donut-legend" id="donut-legend"></div>
+        <div class="donut-tooltip" id="donut-tooltip"></div>
+      </div>
+
+      <div class="buckets-section">
+        <div class="buckets-title">Bucket progress</div>
+        <div id="bucket-list" class="bucket-list"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HISTORY PAGE ═══ -->
+  <section id="page-history" class="page">
+    <div class="page-header">
+      <h1>History</h1>
+      <p class="page-sub">Month by month breakdown</p>
+    </div>
+
+    <div class="month-tabs" id="month-tabs"></div>
+
+    <div class="hist-kpis" id="hist-kpis"></div>
+
+    <div class="hist-body">
+      <div class="hist-panel">
+        <div class="hist-panel-title">Spending by category</div>
+        <div id="hist-cat-list" class="hist-cat-list"></div>
+      </div>
+      <div class="hist-panel">
+        <div class="hist-panel-title">Income by source</div>
+        <div id="hist-inc-list" class="hist-cat-list"></div>
+      </div>
+    </div>
+
+    <div class="txn-panel">
+      <div class="hist-panel-title">All transactions this month</div>
+      <div id="hist-txn-list" class="txn-list"></div>
+    </div>
+  </section>
+
+  <!-- ═══ GOALS PAGE ═══ -->
+  <section id="page-goals" class="page">
+    <div class="page-header">
+      <h1>Goals</h1>
+      <p class="page-sub">Every dream needs a number and a deadline</p>
+    </div>
+
+    <div class="goals-grid" id="goals-grid"></div>
+
+    <div class="add-goal-wrap">
+      <div class="form-panel" style="max-width:520px">
+        <div class="panel-label" style="color:var(--gold)">Add new goal</div>
+        <div class="goal-form-grid">
+          <div class="form-group">
+            <label>Goal name</label>
+            <input type="text" id="goal-name" placeholder="e.g. CPTS Certification">
+          </div>
+          <div class="form-group">
+            <label>Target (₹)</label>
+            <div class="amount-input-wrap">
+              <span class="currency">₹</span>
+              <input type="number" id="goal-target" placeholder="40000">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Deadline</label>
+            <input type="date" id="goal-deadline">
+          </div>
+          <div class="form-group">
+            <label>Saved so far (₹)</label>
+            <div class="amount-input-wrap">
+              <span class="currency">₹</span>
+              <input type="number" id="goal-saved" placeholder="0">
+            </div>
+          </div>
+        </div>
+        <div class="form-error" id="goal-err"></div>
+        <button class="btn btn-income" onclick="addGoal()">Save goal</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAV (mobile) -->
+<nav class="bottom-nav">
+  <button class="bnav-item active" data-page="log" onclick="showPage('log',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Log</span>
+  </button>
+  <button class="bnav-item" data-page="dashboard" onclick="showPage('dashboard',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20"/><path d="M12 12 L12 2"/></svg>
+    <span>Dashboard</span>
+  </button>
+  <button class="bnav-item" data-page="history" onclick="showPage('history',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>History</span>
+  </button>
+  <button class="bnav-item" data-page="goals" onclick="showPage('goals',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    <span>Goals</span>
+  </button>
+</nav>
+
+<script src="app.js"></script>
+</body>
+</html>
