@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#0a0a0a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Vault</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-inner">
+    <div class="logo">
+      <div class="logo-mark">V</div>
+      <span class="logo-text">Vault</span>
+    </div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="log"       onclick="nav('log',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>Log
+      </button>
+      <button class="nav-item" data-page="dashboard"  onclick="nav('dashboard',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20M12 12V2"/></svg>Dashboard
+      </button>
+      <button class="nav-item" data-page="history"    onclick="nav('history',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>History
+      </button>
+      <button class="nav-item" data-page="goals"      onclick="nav('goals',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>Goals
+      </button>
+      <button class="nav-item" data-page="settings"   onclick="nav('settings',this)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings
+      </button>
+    </nav>
+    <div class="sidebar-month" id="sidebar-month"></div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- ══ LOG ══ -->
+  <section id="page-log" class="page active">
+    <div class="page-hdr"><h1>Log</h1><p>Record every rupee in and out</p></div>
+    <div class="log-grid">
+      <div class="form-card income-card">
+        <div class="card-tag income-tag">↑ Income</div>
+        <div class="frow"><label>Date</label><input type="date" id="inc-date"></div>
+        <div class="frow"><label>Source</label>
+          <select id="inc-cat"></select>
+        </div>
+        <div class="frow"><label>Description</label><input type="text" id="inc-desc" placeholder="e.g. Private student session"></div>
+        <div class="frow"><label>Amount</label>
+          <div class="amt-wrap"><span class="rs">₹</span><input type="number" id="inc-amt" placeholder="0" min="0"></div>
+        </div>
+        <div class="ferr" id="inc-err"></div>
+        <button class="btn btn-inc" onclick="addTxn('income')">Add income</button>
+      </div>
+      <div class="form-card expense-card">
+        <div class="card-tag expense-tag">↓ Expense</div>
+        <div class="frow"><label>Date</label><input type="date" id="exp-date"></div>
+        <div class="frow"><label>Bucket</label>
+          <select id="exp-cat"></select>
+        </div>
+        <div class="frow"><label>Description</label><input type="text" id="exp-desc" placeholder="e.g. Groww SIP"></div>
+        <div class="frow"><label>Amount</label>
+          <div class="amt-wrap"><span class="rs">₹</span><input type="number" id="exp-amt" placeholder="0" min="0"></div>
+        </div>
+        <div class="ferr" id="exp-err"></div>
+        <button class="btn btn-exp" onclick="addTxn('expense')">Add expense</button>
+      </div>
+    </div>
+
+    <div class="section-hdr">
+      <span class="section-title">Transactions</span>
+      <div style="display:flex;gap:8px;align-items:center">
+        <input type="text" id="search-input" placeholder="Search..." style="width:160px;font-size:12px;padding:5px 10px" oninput="renderTxnList()">
+        <button class="ghost-btn" onclick="confirmClear()">Clear all</button>
+      </div>
+    </div>
+    <div id="txn-list" class="txn-list"></div>
+  </section>
+
+  <!-- ══ DASHBOARD ══ -->
+  <section id="page-dashboard" class="page">
+    <div class="page-hdr"><h1>Dashboard</h1><p>All time overview</p></div>
+
+    <div class="hero-strip">
+      <div class="hero-card">
+        <div class="hero-lbl">Available to spend</div>
+        <div class="hero-amt" id="dash-avail">₹0</div>
+        <div class="hero-sub" id="dash-sub">Daily living budget remaining</div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><div class="kpi-val inc-c" id="k-inc">₹0</div><div class="kpi-lbl">Income</div></div>
+        <div class="kpi"><div class="kpi-val exp-c" id="k-exp">₹0</div><div class="kpi-lbl">Spent</div></div>
+        <div class="kpi"><div class="kpi-val gld-c" id="k-net">₹0</div><div class="kpi-lbl">Net</div></div>
+        <div class="kpi"><div class="kpi-val inv-c" id="k-inv">₹0</div><div class="kpi-lbl">Invested</div></div>
+      </div>
+    </div>
+
+    <div class="dash-body">
+      <div class="donut-col">
+        <div class="donut-wrap">
+          <canvas id="donut" width="240" height="240"></canvas>
+          <div class="d-center">
+            <div class="d-amt" id="d-total">₹0</div>
+            <div class="d-lbl">total spent</div>
+          </div>
+        </div>
+        <div id="d-legend" class="d-legend"></div>
+      </div>
+      <div class="bucket-col">
+        <div class="bucket-col-title">Bucket progress <span style="font-size:11px;color:var(--t3)">(click name or % to edit)</span></div>
+        <div id="bucket-list"></div>
+      </div>
+    </div>
+    <div class="d-tooltip" id="d-tooltip"></div>
+  </section>
+
+  <!-- ══ HISTORY ══ -->
+  <section id="page-history" class="page">
+    <div class="page-hdr"><h1>History</h1><p>Month by month</p></div>
+    <div class="month-tabs" id="month-tabs"></div>
+    <div class="hist-kpis" id="hist-kpis"></div>
+    <div class="hist-cols">
+      <div class="hist-panel"><div class="hp-title">Expenses by category</div><div id="h-exp-cats"></div></div>
+      <div class="hist-panel"><div class="hp-title">Income by source</div><div id="h-inc-cats"></div></div>
+    </div>
+    <div class="hist-panel" style="margin-top:16px">
+      <div class="hp-title">Transactions</div>
+      <div id="h-txns" class="txn-list"></div>
+    </div>
+  </section>
+
+  <!-- ══ GOALS ══ -->
+  <section id="page-goals" class="page">
+    <div class="page-hdr"><h1>Goals</h1><p>Click any field on a goal card to edit it</p></div>
+    <div id="goals-grid" class="goals-grid"></div>
+    <div class="add-goal-card">
+      <div class="card-tag" style="color:var(--gold)">+ New goal</div>
+      <div class="goal-form-grid">
+        <div class="frow"><label>Name</label><input type="text" id="g-name" placeholder="e.g. CPTS Certification"></div>
+        <div class="frow"><label>Target (₹)</label><div class="amt-wrap"><span class="rs">₹</span><input type="number" id="g-target" placeholder="40000"></div></div>
+        <div class="frow"><label>Saved so far (₹)</label><div class="amt-wrap"><span class="rs">₹</span><input type="number" id="g-saved" placeholder="0"></div></div>
+        <div class="frow"><label>Deadline</label><input type="date" id="g-deadline"></div>
+      </div>
+      <div class="ferr" id="g-err"></div>
+      <button class="btn btn-inc" onclick="addGoal()">Save goal</button>
+    </div>
+  </section>
+
+  <!-- ══ SETTINGS ══ -->
+  <section id="page-settings" class="page">
+    <div class="page-hdr"><h1>Settings</h1><p>Customise categories and buckets</p></div>
+
+    <div class="settings-grid">
+      <!-- Income categories -->
+      <div class="settings-panel">
+        <div class="sp-title">Income categories</div>
+        <div id="inc-cats-list" class="cats-list"></div>
+        <div class="add-cat-row">
+          <input type="text" id="new-inc-cat" placeholder="New category name">
+          <button class="btn btn-inc" style="width:auto;padding:8px 16px" onclick="addCat('income')">Add</button>
+        </div>
+        <div class="ferr" id="inc-cat-err"></div>
+      </div>
+
+      <!-- Expense categories -->
+      <div class="settings-panel">
+        <div class="sp-title">Expense categories / buckets</div>
+        <div id="exp-cats-list" class="cats-list"></div>
+        <div class="add-cat-row">
+          <input type="text" id="new-exp-cat" placeholder="New category name">
+          <button class="btn btn-exp" style="width:auto;padding:8px 16px" onclick="addCat('expense')">Add</button>
+        </div>
+        <div class="ferr" id="exp-cat-err"></div>
+      </div>
+
+      <!-- Buckets config -->
+      <div class="settings-panel" style="grid-column:1/-1">
+        <div class="sp-title">Bucket allocation <span style="font-size:11px;color:var(--t3);font-weight:400">— total must equal 100%  ·  click any field to edit</span></div>
+        <div id="buckets-config" class="buckets-config"></div>
+        <button class="btn btn-inc" style="width:auto;padding:8px 20px;margin-top:12px" onclick="addBucket()">+ Add bucket</button>
+        <div class="ferr" id="b-err"></div>
+      </div>
+
+      <!-- Danger zone -->
+      <div class="settings-panel danger-zone" style="grid-column:1/-1">
+        <div class="sp-title" style="color:var(--exp)">Danger zone</div>
+        <button class="btn" style="background:var(--exp);color:#fff;width:auto;padding:8px 20px" onclick="confirmClear()">Delete all transactions</button>
+        <button class="btn" style="background:#333;color:var(--t2);width:auto;padding:8px 20px;margin-left:10px" onclick="exportData()">Export data (JSON)</button>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <button class="bn active" data-page="log"       onclick="nav('log',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    <span>Log</span>
+  </button>
+  <button class="bn" data-page="dashboard"  onclick="nav('dashboard',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a10 10 0 0 1 0 20M12 12V2"/></svg>
+    <span>Dash</span>
+  </button>
+  <button class="bn" data-page="history"    onclick="nav('history',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    <span>History</span>
+  </button>
+  <button class="bn" data-page="goals"      onclick="nav('goals',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+    <span>Goals</span>
+  </button>
+  <button class="bn" data-page="settings"   onclick="nav('settings',this)">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <span>Settings</span>
+  </button>
+</nav>
+
+<!-- EDIT MODAL -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModal()">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-title" id="modal-title">Edit transaction</div>
+    <div id="modal-body"></div>
+    <div class="ferr" id="modal-err"></div>
+    <div class="modal-actions">
+      <button class="btn" style="background:#222;color:var(--t2);flex:1" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-inc" style="flex:1" id="modal-save-btn">Save</button>
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>
